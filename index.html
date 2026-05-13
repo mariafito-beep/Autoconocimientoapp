@@ -287,6 +287,12 @@
       .card{break-inside:avoid}
     }
   </style>
+
+  <meta name="theme-color" content="#7c3aed">
+  <meta name="description" content="App educativa de autoconocimiento, Maslow, Ikigai, DAFO y competencias para IPE II.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
 </head>
 <body>
 
@@ -696,6 +702,17 @@ function generarInforme(){
       <p><strong>Frase final:</strong> Tu perfil profesional no se adivina: se construye con evidencias, reflexión y mejora continua.</p>
     </div>
   `;
+}
+</script>
+
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", function() {
+    navigator.serviceWorker.register("service-worker.js")
+      .then(function() { console.log("Service Worker registrado"); })
+      .catch(function(error) { console.log("Error registrando Service Worker:", error); });
+  });
 }
 </script>
 
