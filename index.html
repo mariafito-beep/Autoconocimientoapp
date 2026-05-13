@@ -5,204 +5,524 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Descubre tu Potencial - IPE II</title>
   <style>
-    body{font-family:Arial,sans-serif;margin:0;background:#f4f6f8;color:#1f2937}
-    header{background:#111827;color:white;padding:25px;text-align:center}
-    main{max-width:950px;margin:25px auto;background:white;padding:25px;border-radius:18px;box-shadow:0 4px 15px #0002}
-    h2{color:#111827}
+    :root{
+      --dark:#111827;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --pink:#ec4899;
+      --purple:#8b5cf6;
+      --blue:#3b82f6;
+      --cyan:#06b6d4;
+      --green:#10b981;
+      --yellow:#f59e0b;
+      --orange:#f97316;
+      --red:#ef4444;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      font-family:Arial,sans-serif;
+      margin:0;
+      color:var(--text);
+      background:
+        radial-gradient(circle at top left,#fce7f3 0,#fce7f3 18%,transparent 38%),
+        radial-gradient(circle at top right,#dbeafe 0,#dbeafe 20%,transparent 42%),
+        linear-gradient(135deg,#f8fafc,#eef2ff);
+      min-height:100vh;
+    }
+
+    header{
+      background:linear-gradient(135deg,#111827,#4c1d95,#7c3aed);
+      color:white;
+      padding:32px 20px;
+      text-align:center;
+      position:relative;
+      overflow:hidden;
+    }
+
+    header::before{
+      content:"";
+      position:absolute;
+      width:260px;
+      height:260px;
+      border-radius:50%;
+      background:rgba(255,255,255,.10);
+      top:-100px;
+      left:-70px;
+    }
+
+    header::after{
+      content:"";
+      position:absolute;
+      width:220px;
+      height:220px;
+      border-radius:50%;
+      background:rgba(255,255,255,.08);
+      bottom:-110px;
+      right:-60px;
+    }
+
+    header h1, header p{position:relative;z-index:2}
+    header h1{margin:0;font-size:2.2rem}
+    header p{margin:8px 0 0;color:#e0e7ff}
+
+    main{
+      max-width:980px;
+      margin:25px auto;
+      background:rgba(255,255,255,.92);
+      padding:25px;
+      border-radius:28px;
+      box-shadow:0 20px 45px #0002;
+      border:1px solid rgba(255,255,255,.8);
+      backdrop-filter:blur(8px);
+    }
+
+    h2{color:#111827;margin-top:0;font-size:1.9rem}
     h3{margin-bottom:8px}
+
     .step{display:none}
-    .step.active{display:block}
-    label{font-weight:bold;display:block;margin-top:15px}
-    input,textarea,select{width:100%;padding:10px;margin-top:6px;border:1px solid #ccc;border-radius:10px;box-sizing:border-box}
-    textarea{min-height:90px}
-    button{background:#111827;color:white;border:0;padding:12px 18px;border-radius:10px;margin:10px 5px;cursor:pointer}
-    button:hover{background:#374151}
+    .step.active{display:block;animation:fade .25s ease}
+
+    @keyframes fade{
+      from{opacity:0;transform:translateY(8px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    label{
+      font-weight:bold;
+      display:block;
+      margin-top:15px;
+      color:#374151;
+    }
+
+    input,textarea,select{
+      width:100%;
+      padding:12px;
+      margin-top:6px;
+      border:1px solid #d1d5db;
+      border-radius:14px;
+      background:white;
+      font-size:1rem;
+      transition:.2s;
+    }
+
+    input:focus, textarea:focus{
+      outline:none;
+      border-color:#8b5cf6;
+      box-shadow:0 0 0 4px #ede9fe;
+    }
+
+    textarea{min-height:95px;resize:vertical}
+
+    input[type="range"]{
+      accent-color:#8b5cf6;
+      padding:0;
+      margin-top:10px;
+    }
+
+    button{
+      background:linear-gradient(135deg,#111827,#6d28d9);
+      color:white;
+      border:0;
+      padding:13px 20px;
+      border-radius:16px;
+      margin:10px 5px;
+      cursor:pointer;
+      font-weight:bold;
+      box-shadow:0 8px 18px #0002;
+    }
+
+    button:hover{filter:brightness(1.08);transform:translateY(-1px)}
+    button:active{transform:translateY(0)}
+
     .nav{text-align:center;margin-top:25px}
-    .card{background:#f9fafb;padding:15px;border-radius:14px;margin:12px 0;border-left:5px solid #111827}
-    .info{background:#eef2ff;border-left-color:#4f46e5}
-    .result{background:#ecfdf5;border-left-color:#059669}
-    .warning{background:#fff7ed;border-left-color:#ea580c}
-    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
-    .badge{display:inline-block;background:#e5e7eb;padding:8px 12px;border-radius:20px;margin:5px}
-    .progress{height:12px;background:#e5e7eb;border-radius:20px;overflow:hidden;margin-bottom:25px}
-    .bar{height:100%;background:#111827;width:0%}
+
+    .progress{
+      height:14px;
+      background:#e5e7eb;
+      border-radius:20px;
+      overflow:hidden;
+      margin-bottom:25px;
+    }
+
+    .bar{
+      height:100%;
+      background:linear-gradient(90deg,#ec4899,#8b5cf6,#3b82f6,#10b981);
+      width:0%;
+      transition:.3s;
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.3fr .7fr;
+      gap:18px;
+      align-items:center;
+      margin-bottom:20px;
+      padding:20px;
+      border-radius:24px;
+      background:linear-gradient(135deg,#fdf2f8,#eef2ff);
+      border:1px solid #f3e8ff;
+    }
+
+    .hero-icon{
+      font-size:5rem;
+      text-align:center;
+      filter:drop-shadow(0 10px 12px #0002);
+    }
+
+    .card{
+      background:#f9fafb;
+      padding:17px;
+      border-radius:20px;
+      margin:12px 0;
+      border-left:7px solid #111827;
+      box-shadow:0 6px 18px #0000000d;
+    }
+
+    .info{background:#eef2ff;border-left-color:#6366f1}
+    .result{background:#ecfdf5;border-left-color:#10b981}
+    .warning{background:#fff7ed;border-left-color:#f97316}
+
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:15px;
+    }
+
+    .badge{
+      display:inline-block;
+      background:linear-gradient(135deg,#f3e8ff,#dbeafe);
+      color:#312e81;
+      padding:8px 12px;
+      border-radius:999px;
+      margin:5px;
+      font-weight:bold;
+      font-size:.92rem;
+    }
+
     .small{font-size:0.92rem;color:#4b5563}
-    .maslow-card{border-left-width:8px}
-    .level1{border-left-color:#dc2626}
-    .level2{border-left-color:#ea580c}
-    .level3{border-left-color:#ca8a04}
-    .level4{border-left-color:#2563eb}
-    .level5{border-left-color:#7c3aed}
-    .print-only{display:none}
+
+    .screen-data .hero{background:linear-gradient(135deg,#dbeafe,#f0f9ff)}
+    .screen-self .hero{background:linear-gradient(135deg,#fce7f3,#ede9fe)}
+    .screen-maslow .hero{background:linear-gradient(135deg,#fff7ed,#fef3c7)}
+    .screen-ikigai .hero{background:linear-gradient(135deg,#dcfce7,#ccfbf1)}
+    .screen-dafo .hero{background:linear-gradient(135deg,#fee2e2,#e0e7ff)}
+    .screen-report .hero{background:linear-gradient(135deg,#ede9fe,#dbeafe,#dcfce7)}
+
+    .maslow-card{border-left-width:9px;background:white}
+    .level1{border-left-color:#ef4444}
+    .level2{border-left-color:#f97316}
+    .level3{border-left-color:#f59e0b}
+    .level4{border-left-color:#3b82f6}
+    .level5{border-left-color:#8b5cf6}
+
+    .dafo-d{border-left-color:#f97316;background:#fff7ed}
+    .dafo-a{border-left-color:#ef4444;background:#fef2f2}
+    .dafo-f{border-left-color:#10b981;background:#ecfdf5}
+    .dafo-o{border-left-color:#3b82f6;background:#eff6ff}
+
+    .question-box{
+      padding:14px;
+      border-radius:18px;
+      background:white;
+      border:1px solid #e5e7eb;
+      margin-top:12px;
+    }
+
+    .mini-title{
+      display:inline-block;
+      padding:5px 10px;
+      border-radius:999px;
+      color:white;
+      font-size:.82rem;
+      font-weight:bold;
+      margin-bottom:8px;
+    }
+
+    .pink{background:#ec4899}
+    .purple{background:#8b5cf6}
+    .blue{background:#3b82f6}
+    .green{background:#10b981}
+    .orange{background:#f97316}
+    .red{background:#ef4444}
+    .yellow{background:#f59e0b}
+
+    .pill-row{margin:12px 0}
+    .pill{
+      display:inline-block;
+      padding:7px 11px;
+      border-radius:999px;
+      margin:4px;
+      background:white;
+      border:1px solid #e5e7eb;
+      color:#374151;
+      font-size:.9rem;
+    }
+
+    .app-note{
+      background:#111827;
+      color:white;
+      border-radius:20px;
+      padding:16px;
+      margin:15px 0;
+    }
+
+    .app-note strong{color:#fde68a}
+
+    @media(max-width:720px){
+      main{margin:10px;padding:17px;border-radius:22px}
+      header h1{font-size:1.8rem}
+      .hero{grid-template-columns:1fr}
+      .hero-icon{font-size:4rem}
+    }
+
     @media print{
       body{background:white}
       main{box-shadow:none;margin:0;max-width:100%}
       header,.nav,.progress{display:none}
       .step{display:block}
       .step:not(:last-of-type){display:none}
-      .print-only{display:block}
+      .card{break-inside:avoid}
     }
   </style>
 </head>
 <body>
 
 <header>
-  <h1>Descubre tu Potencial</h1>
-  <p>App de autoconocimiento, Maslow, Ikigai, DAFO y competencias - IPE II</p>
+  <h1>✨ Descubre tu Potencial</h1>
+  <p>Autoconocimiento · Maslow · Ikigai · DAFO · Competencias · IPE II</p>
 </header>
 
 <main>
   <div class="progress"><div class="bar" id="bar"></div></div>
 
-  <section class="step active">
-    <h2>1. Datos iniciales</h2>
-    <div class="card info">
-      <p>Esta actividad te ayudará a analizar tu perfil personal y profesional. No se trata de contestar “lo bonito”, sino de construir una imagen útil de ti como estudiante y futuro/a profesional.</p>
+  <section class="step active screen-data">
+    <div class="hero">
+      <div>
+        <h2>1. Datos iniciales</h2>
+        <p>Empezamos situando el perfil del estudiante. Esta información aparecerá en el informe final.</p>
+      </div>
+      <div class="hero-icon">🧭</div>
     </div>
-    <label>Nombre</label><input id="nombre">
-    <label>Ciclo formativo</label><input id="ciclo">
-    <label>Sector profesional que te interesa</label><input id="sector">
+
+    <div class="card info">
+      <p>Esta actividad te ayudará a construir una imagen útil de ti como estudiante y futuro/a profesional. Aquí no se viene a quedar bien: se viene a conocerse mejor.</p>
+    </div>
+
+    <label>Nombre</label><input id="nombre" placeholder="Ej. Alba Martínez">
+    <label>Ciclo formativo</label><input id="ciclo" placeholder="Ej. Gestión Administrativa, Automoción, Estética...">
+    <label>Sector profesional que te interesa</label><input id="sector" placeholder="Ej. empresa, tecnología, estética, automoción, salud...">
     <label>Escribe 3 palabras que te definan ahora</label><input id="palabras" placeholder="Ej: responsable, creativa, tímido">
   </section>
 
-  <section class="step">
-    <h2>2. Autoconocimiento</h2>
-    <div class="card info">
-      <p>Antes de hablar de competencias, necesitamos observar conducta, intereses, dificultades y forma de aprender. Aquí empieza el “mapa” personal.</p>
+  <section class="step screen-self">
+    <div class="hero">
+      <div>
+        <h2>2. Autoconocimiento</h2>
+        <p>Analizamos intereses, conducta, forma de aprender y puntos de mejora.</p>
+      </div>
+      <div class="hero-icon">🧠</div>
     </div>
-    <label>¿Qué te gusta hacer o aprender?</label><textarea id="gustos"></textarea>
-    <label>¿Qué no te gusta o te cuesta?</label><textarea id="nogustos"></textarea>
-    <label>¿Qué se te da bien?</label><textarea id="bien"></textarea>
-    <label>¿Qué sueles evitar?</label><textarea id="evita"></textarea>
 
-    <label>Trabajo en equipo</label><input type="range" min="1" max="5" value="3" id="equipo">
-    <label>Comunicación</label><input type="range" min="1" max="5" value="3" id="comunicacion">
-    <label>Responsabilidad</label><input type="range" min="1" max="5" value="3" id="responsabilidad">
-    <label>Iniciativa</label><input type="range" min="1" max="5" value="3" id="iniciativa">
-    <label>Creatividad</label><input type="range" min="1" max="5" value="3" id="creatividad">
-    <label>Conciencia ambiental</label><input type="range" min="1" max="5" value="3" id="verde">
+    <div class="card info">
+      <span class="mini-title purple">Mapa personal</span>
+      <p>Antes de hablar de competencias, necesitamos observar cómo actúas, qué te mueve y qué te frena.</p>
+    </div>
+
+    <div class="grid">
+      <div class="question-box">
+        <label>💚 ¿Qué te gusta hacer o aprender?</label><textarea id="gustos" placeholder="Asignaturas, tareas, aficiones, actividades..."></textarea>
+      </div>
+      <div class="question-box">
+        <label>🚧 ¿Qué no te gusta o te cuesta?</label><textarea id="nogustos" placeholder="Situaciones que te bloquean o te aburren..."></textarea>
+      </div>
+      <div class="question-box">
+        <label>⭐ ¿Qué se te da bien?</label><textarea id="bien" placeholder="Habilidades, cualidades, tareas o conductas positivas..."></textarea>
+      </div>
+      <div class="question-box">
+        <label>🙈 ¿Qué sueles evitar?</label><textarea id="evita" placeholder="Hablar en público, organizarte, pedir ayuda..."></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <span class="mini-title pink">Valora del 1 al 5</span>
+      <label>🤝 Trabajo en equipo</label><input type="range" min="1" max="5" value="3" id="equipo">
+      <label>🗣️ Comunicación</label><input type="range" min="1" max="5" value="3" id="comunicacion">
+      <label>📌 Responsabilidad</label><input type="range" min="1" max="5" value="3" id="responsabilidad">
+      <label>🚀 Iniciativa</label><input type="range" min="1" max="5" value="3" id="iniciativa">
+      <label>🎨 Creatividad</label><input type="range" min="1" max="5" value="3" id="creatividad">
+      <label>🌱 Conciencia ambiental</label><input type="range" min="1" max="5" value="3" id="verde">
+    </div>
   </section>
 
-  <section class="step">
-    <h2>3. Pirámide de Maslow</h2>
+  <section class="step screen-maslow">
+    <div class="hero">
+      <div>
+        <h2>3. Pirámide de Maslow</h2>
+        <p>Detectamos qué necesidades están más fuertes y cuáles pueden condicionar la motivación.</p>
+      </div>
+      <div class="hero-icon">🏗️</div>
+    </div>
+
     <div class="card info">
-      <p><strong>¿Qué hacemos aquí?</strong> La pirámide de Maslow ayuda a detectar qué necesidades influyen en tu motivación, seguridad, pertenencia, autoestima y desarrollo personal. Contesta del 1 al 5 según cómo te sientes actualmente.</p>
-      <p class="small">1 = muy poco / 5 = mucho. No hay respuestas malas: hay información útil.</p>
+      <span class="mini-title orange">Clave de lectura</span>
+      <p><strong>Maslow</strong> ayuda a entender si la base personal permite avanzar hacia metas más altas. Si una parte baja está floja, no es fracaso: es una pista de intervención.</p>
+      <p class="small">1 = muy poco / 5 = mucho. Contesta pensando en tu situación actual.</p>
     </div>
 
     <div class="card maslow-card level1">
-      <h3>Escalón 1: necesidades básicas</h3>
+      <h3>🔴 Escalón 1: necesidades básicas</h3>
       <p class="small">Descanso, alimentación, salud, energía y condiciones mínimas para estudiar.</p>
       <label>¿Tienes energía y descanso suficiente para rendir en clase?</label>
       <input type="range" min="1" max="5" value="3" id="maslow1a">
       <label>¿Tus necesidades básicas te permiten concentrarte y aprender?</label>
       <input type="range" min="1" max="5" value="3" id="maslow1b">
-      <label>Explica brevemente tu situación en este escalón</label>
+      <label>Explica brevemente tu situación</label>
       <textarea id="maslowTxt1" placeholder="Ej: duermo poco, me cuesta concentrarme, suelo venir con energía..."></textarea>
     </div>
 
     <div class="card maslow-card level2">
-      <h3>Escalón 2: seguridad</h3>
+      <h3>🟠 Escalón 2: seguridad</h3>
       <p class="small">Estabilidad, normas claras, organización, confianza y sensación de control.</p>
       <label>¿Te sientes seguro/a y con estabilidad para estudiar?</label>
       <input type="range" min="1" max="5" value="3" id="maslow2a">
       <label>¿Tienes claro qué se espera de ti y cómo organizarte?</label>
       <input type="range" min="1" max="5" value="3" id="maslow2b">
-      <label>Explica brevemente tu situación en este escalón</label>
+      <label>Explica brevemente tu situación</label>
       <textarea id="maslowTxt2" placeholder="Ej: me cuesta organizarme, necesito normas claras, me siento estable..."></textarea>
     </div>
 
     <div class="card maslow-card level3">
-      <h3>Escalón 3: pertenencia</h3>
+      <h3>🟡 Escalón 3: pertenencia</h3>
       <p class="small">Relaciones, grupo, apoyo, sentirse aceptado/a y poder pedir ayuda.</p>
-      <label>¿Te sientes integrado/a en el grupo o en el entorno de clase?</label>
+      <label>¿Te sientes integrado/a en el grupo o en clase?</label>
       <input type="range" min="1" max="5" value="3" id="maslow3a">
       <label>¿Tienes personas a las que pedir ayuda cuando lo necesitas?</label>
       <input type="range" min="1" max="5" value="3" id="maslow3b">
-      <label>Explica brevemente tu situación en este escalón</label>
+      <label>Explica brevemente tu situación</label>
       <textarea id="maslowTxt3" placeholder="Ej: trabajo bien con otros, me cuesta integrarme, tengo apoyo..."></textarea>
     </div>
 
     <div class="card maslow-card level4">
-      <h3>Escalón 4: reconocimiento y autoestima</h3>
+      <h3>🔵 Escalón 4: reconocimiento y autoestima</h3>
       <p class="small">Confianza, valoración personal, sensación de logro y reconocimiento externo.</p>
       <label>¿Reconoces tus logros y capacidades?</label>
       <input type="range" min="1" max="5" value="3" id="maslow4a">
       <label>¿Sientes que los demás valoran tus esfuerzos?</label>
       <input type="range" min="1" max="5" value="3" id="maslow4b">
-      <label>Explica brevemente tu situación en este escalón</label>
-      <textarea id="maslowTxt4" placeholder="Ej: me cuesta valorar lo que hago, necesito más confianza, suelo recibir reconocimiento..."></textarea>
+      <label>Explica brevemente tu situación</label>
+      <textarea id="maslowTxt4" placeholder="Ej: me cuesta valorar lo que hago, necesito más confianza..."></textarea>
     </div>
 
     <div class="card maslow-card level5">
-      <h3>Escalón 5: autorrealización</h3>
+      <h3>🟣 Escalón 5: autorrealización</h3>
       <p class="small">Propósito, crecimiento, metas personales y deseo de desarrollar el propio potencial.</p>
       <label>¿Tienes metas personales o profesionales que te ilusionan?</label>
       <input type="range" min="1" max="5" value="3" id="maslow5a">
       <label>¿Sientes que estás desarrollando tu potencial?</label>
       <input type="range" min="1" max="5" value="3" id="maslow5b">
-      <label>Explica brevemente tu situación en este escalón</label>
+      <label>Explica brevemente tu situación</label>
       <textarea id="maslowTxt5" placeholder="Ej: tengo objetivos claros, no sé qué quiero, quiero mejorar..."></textarea>
     </div>
   </section>
 
-  <section class="step">
-    <h2>4. Ikigai</h2>
-    <div class="card info">
-      <p>El Ikigai ayuda a cruzar intereses, capacidades, utilidad social y salida profesional. No tiene que salir perfecto: es una hipótesis de orientación.</p>
+  <section class="step screen-ikigai">
+    <div class="hero">
+      <div>
+        <h2>4. Ikigai</h2>
+        <p>Buscamos una primera hipótesis de propósito profesional.</p>
+      </div>
+      <div class="hero-icon">🎯</div>
     </div>
-    <label>Lo que amas o te interesa</label><textarea id="ikigai1"></textarea>
-    <label>Lo que se te da bien</label><textarea id="ikigai2"></textarea>
-    <label>Lo que el mundo o tu entorno necesita</label><textarea id="ikigai3"></textarea>
-    <label>Por lo que podrían pagarte</label><textarea id="ikigai4"></textarea>
-  </section>
 
-  <section class="step">
-    <h2>5. DAFO personal</h2>
     <div class="card info">
-      <p><strong>DAFO</strong> significa: <strong>Debilidades, Amenazas, Fortalezas y Oportunidades</strong>. Sirve para analizar tu situación personal y profesional antes de tomar decisiones.</p>
+      <span class="mini-title green">Cruce de intereses</span>
+      <p>El Ikigai une lo que te gusta, lo que se te da bien, lo que aporta valor y lo que puede convertirse en una salida profesional.</p>
     </div>
 
     <div class="grid">
-      <div class="card">
-        <h3>D - Debilidades</h3>
-        <p class="small"><strong>Qué significa:</strong> aspectos internos que te limitan o debes mejorar.</p>
-        <p class="small"><strong>Qué debes responder:</strong> ¿Qué me cuesta? ¿Qué evito? ¿Qué hábito me perjudica? ¿Qué competencia necesito mejorar?</p>
-        <textarea id="debilidades" placeholder="Ej: me cuesta hablar en público, me organizo mal, dejo tareas para el final..."></textarea>
+      <div class="card" style="border-left-color:#ec4899">
+        <h3>💖 Lo que amas</h3>
+        <label>Lo que te interesa o te gusta</label><textarea id="ikigai1" placeholder="Ej. ayudar, crear, reparar, organizar, investigar..."></textarea>
       </div>
-
-      <div class="card">
-        <h3>A - Amenazas</h3>
-        <p class="small"><strong>Qué significa:</strong> factores externos que pueden dificultar tus objetivos.</p>
-        <p class="small"><strong>Qué debes responder:</strong> ¿Qué obstáculos hay fuera de mí? ¿Competencia? ¿Falta de oportunidades? ¿Cambios del sector?</p>
-        <textarea id="amenazas" placeholder="Ej: mucha competencia, pocas prácticas, sector cambiante, falta de experiencia..."></textarea>
+      <div class="card" style="border-left-color:#8b5cf6">
+        <h3>💪 Lo que se te da bien</h3>
+        <label>Capacidades o talentos</label><textarea id="ikigai2" placeholder="Ej. escuchar, calcular, diseñar, resolver problemas..."></textarea>
       </div>
-
-      <div class="card">
-        <h3>F - Fortalezas</h3>
-        <p class="small"><strong>Qué significa:</strong> aspectos internos positivos que ya tienes y puedes aprovechar.</p>
-        <p class="small"><strong>Qué debes responder:</strong> ¿Qué se me da bien? ¿Qué cualidades tengo? ¿Qué valoran de mí? ¿Qué hago mejor que antes?</p>
-        <textarea id="fortalezas" placeholder="Ej: soy constante, aprendo rápido, trabajo bien en equipo, soy cuidadoso/a..."></textarea>
+      <div class="card" style="border-left-color:#10b981">
+        <h3>🌍 Lo que el entorno necesita</h3>
+        <label>Aportación útil</label><textarea id="ikigai3" placeholder="Ej. cuidar, mejorar, ahorrar energía, informar, acompañar..."></textarea>
       </div>
-
-      <div class="card">
-        <h3>O - Oportunidades</h3>
-        <p class="small"><strong>Qué significa:</strong> factores externos que pueden ayudarte a crecer.</p>
-        <p class="small"><strong>Qué debes responder:</strong> ¿Qué recursos tengo cerca? ¿Qué formación puedo hacer? ¿Qué contactos, prácticas o tendencias puedo aprovechar?</p>
-        <textarea id="oportunidades" placeholder="Ej: prácticas en empresa, cursos, profesorado, nuevas tecnologías, sostenibilidad..."></textarea>
+      <div class="card" style="border-left-color:#3b82f6">
+        <h3>💼 Por lo que podrían pagarte</h3>
+        <label>Salida profesional</label><textarea id="ikigai4" placeholder="Ej. servicios, mantenimiento, atención al cliente, asesoramiento..."></textarea>
       </div>
     </div>
   </section>
 
-  <section class="step">
-    <h2>6. Informe final</h2>
+  <section class="step screen-dafo">
+    <div class="hero">
+      <div>
+        <h2>5. DAFO personal</h2>
+        <p>Ordenamos la información para tomar decisiones profesionales con más criterio.</p>
+      </div>
+      <div class="hero-icon">🧩</div>
+    </div>
+
+    <div class="card info">
+      <span class="mini-title blue">DAFO</span>
+      <p><strong>DAFO</strong> significa: <strong>Debilidades, Amenazas, Fortalezas y Oportunidades</strong>. Es una herramienta para analizar tu situación personal y profesional.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card dafo-d">
+        <h3>🟠 D - Debilidades</h3>
+        <p class="small"><strong>Qué significa:</strong> aspectos internos que te limitan o debes mejorar.</p>
+        <p class="small"><strong>Qué responder:</strong> ¿Qué me cuesta? ¿Qué evito? ¿Qué hábito me perjudica?</p>
+        <textarea id="debilidades" placeholder="Ej: me cuesta hablar en público, me organizo mal..."></textarea>
+      </div>
+
+      <div class="card dafo-a">
+        <h3>🔴 A - Amenazas</h3>
+        <p class="small"><strong>Qué significa:</strong> factores externos que pueden dificultar tus objetivos.</p>
+        <p class="small"><strong>Qué responder:</strong> ¿Qué obstáculos hay fuera de mí? ¿Competencia? ¿Cambios del sector?</p>
+        <textarea id="amenazas" placeholder="Ej: mucha competencia, pocas prácticas, sector cambiante..."></textarea>
+      </div>
+
+      <div class="card dafo-f">
+        <h3>🟢 F - Fortalezas</h3>
+        <p class="small"><strong>Qué significa:</strong> aspectos internos positivos que puedes aprovechar.</p>
+        <p class="small"><strong>Qué responder:</strong> ¿Qué se me da bien? ¿Qué cualidades tengo? ¿Qué valoran de mí?</p>
+        <textarea id="fortalezas" placeholder="Ej: soy constante, aprendo rápido, trabajo bien en equipo..."></textarea>
+      </div>
+
+      <div class="card dafo-o">
+        <h3>🔵 O - Oportunidades</h3>
+        <p class="small"><strong>Qué significa:</strong> factores externos que pueden ayudarte a crecer.</p>
+        <p class="small"><strong>Qué responder:</strong> ¿Qué recursos, prácticas, contactos o tendencias puedo aprovechar?</p>
+        <textarea id="oportunidades" placeholder="Ej: cursos, prácticas, nuevas tecnologías, sostenibilidad..."></textarea>
+      </div>
+    </div>
+  </section>
+
+  <section class="step screen-report">
+    <div class="hero">
+      <div>
+        <h2>6. Informe final</h2>
+        <p>Resultado del proceso: perfil, Maslow, Ikigai, DAFO y competencias.</p>
+      </div>
+      <div class="hero-icon">📄</div>
+    </div>
+
     <div id="informe"></div>
     <button onclick="window.print()">Imprimir / Guardar PDF</button>
   </section>
 
   <div class="nav">
-    <button onclick="prev()">Anterior</button>
-    <button onclick="next()">Siguiente</button>
+    <button onclick="prev()">⬅️ Anterior</button>
+    <button onclick="next()">Siguiente ➡️</button>
   </div>
 </main>
 
@@ -218,6 +538,7 @@ function showStep(){
   steps[step].classList.add("active");
   document.getElementById("bar").style.width = ((step)/(steps.length-1)*100) + "%";
   if(step === steps.length-1) generarInforme();
+  window.scrollTo({top:0, behavior:"smooth"});
 }
 
 function next(){
@@ -329,25 +650,25 @@ function generarInforme(){
 
   document.getElementById("informe").innerHTML = `
     <div class="card result">
-      <h2>Perfil de ${val("nombre") || "estudiante"}</h2>
+      <h2>👤 Perfil de ${val("nombre") || "estudiante"}</h2>
       <p><strong>Ciclo:</strong> ${val("ciclo") || "No indicado"}</p>
       <p><strong>Sector de interés:</strong> ${val("sector") || "No indicado"}</p>
     </div>
 
     <div class="card">
-      <h3>Adjetivos que definen al estudiante</h3>
+      <h3>✨ Adjetivos que definen al estudiante</h3>
       ${adjetivos.map(a => `<span class="badge">${a}</span>`).join("")}
     </div>
 
     <div class="card">
-      <h3>Lectura de la pirámide de Maslow</h3>
+      <h3>🏗️ Lectura de la pirámide de Maslow</h3>
       ${maslowHTML}
       <hr>
       ${generarLecturaMaslow()}
     </div>
 
     <div class="card">
-      <h3>Ikigai provisional</h3>
+      <h3>🎯 Ikigai provisional</h3>
       <p>Tu perfil apunta a combinar <strong>${val("ikigai1") || "tus intereses"}</strong>, 
       con <strong>${val("ikigai2") || "tus capacidades"}</strong>, aportando valor mediante 
       <strong>${val("ikigai3") || "una contribución útil"}</strong> y orientándolo hacia 
@@ -355,7 +676,7 @@ function generarInforme(){
     </div>
 
     <div class="card">
-      <h3>DAFO personal explicado</h3>
+      <h3>🧩 DAFO personal explicado</h3>
       <p><strong>D - Debilidades:</strong> aspectos internos a mejorar. ${val("debilidades") || val("nogustos") || "Pendiente de concretar."}</p>
       <p><strong>A - Amenazas:</strong> factores externos que pueden dificultar el objetivo profesional. ${val("amenazas") || "Pendiente de concretar."}</p>
       <p><strong>F - Fortalezas:</strong> cualidades internas y competencias que favorecen el desarrollo. ${val("fortalezas") || val("bien") || "Pendiente de concretar."}</p>
@@ -363,14 +684,14 @@ function generarInforme(){
     </div>
 
     <div class="card">
-      <h3>Competencias detectadas</h3>
+      <h3>🛠️ Competencias detectadas</h3>
       <p><strong>Soft skills:</strong> ${soft.join(", ") || "pendientes de desarrollar"}</p>
       <p><strong>Deep skills:</strong> ${deep.join(", ") || "pendientes de desarrollar"}</p>
       <p><strong>Green skills:</strong> ${green.join(", ") || "pendientes de desarrollar"}</p>
     </div>
 
     <div class="card result">
-      <h3>Propuesta de mejora</h3>
+      <h3>🚀 Propuesta de mejora</h3>
       <p>Elige una competencia débil, practícala durante dos semanas en clase o en prácticas, y recoge una evidencia: reflexión, foto, rúbrica, feedback o ejemplo real.</p>
       <p><strong>Frase final:</strong> Tu perfil profesional no se adivina: se construye con evidencias, reflexión y mejora continua.</p>
     </div>
