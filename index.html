@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Descubre tu Potencial - IPE II</title>
+  <style>
+    body{font-family:Arial,sans-serif;margin:0;background:#f4f6f8;color:#1f2937}
+    header{background:#111827;color:white;padding:25px;text-align:center}
+    main{max-width:900px;margin:25px auto;background:white;padding:25px;border-radius:18px;box-shadow:0 4px 15px #0002}
+    h2{color:#111827}
+    .step{display:none}
+    .step.active{display:block}
+    label{font-weight:bold;display:block;margin-top:15px}
+    input,textarea,select{width:100%;padding:10px;margin-top:6px;border:1px solid #ccc;border-radius:10px}
+    textarea{min-height:80px}
+    button{background:#111827;color:white;border:0;padding:12px 18px;border-radius:10px;margin:10px 5px;cursor:pointer}
+    button:hover{background:#374151}
+    .nav{text-align:center;margin-top:25px}
+    .card{background:#f9fafb;padding:15px;border-radius:14px;margin:12px 0;border-left:5px solid #111827}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:15px}
+    .badge{display:inline-block;background:#e5e7eb;padding:8px 12px;border-radius:20px;margin:5px}
+    .progress{height:12px;background:#e5e7eb;border-radius:20px;overflow:hidden}
+    .bar{height:100%;background:#111827;width:0%}
+    .result{background:#ecfdf5;border-left:5px solid #059669}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Descubre tu Potencial</h1>
+  <p>App de autoconocimiento, Maslow, Ikigai, DAFO y competencias - IPE II</p>
+</header>
+
+<main>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+
+  <section class="step active">
+    <h2>1. Datos iniciales</h2>
+    <label>Nombre</label><input id="nombre">
+    <label>Ciclo formativo</label><input id="ciclo">
+    <label>Sector profesional que te interesa</label><input id="sector">
+    <label>Escribe 3 palabras que te definan</label><input id="palabras" placeholder="Ej: responsable, creativa, tímido">
+  </section>
+
+  <section class="step">
+    <h2>2. Autoconocimiento</h2>
+    <label>¿Qué te gusta hacer?</label><textarea id="gustos"></textarea>
+    <label>¿Qué no te gusta o te cuesta?</label><textarea id="nogustos"></textarea>
+    <label>¿Qué se te da bien?</label><textarea id="bien"></textarea>
+    <label>¿Qué sueles evitar?</label><textarea id="evita"></textarea>
+
+    <label>Trabajo en equipo</label><input type="range" min="1" max="5" value="3" id="equipo">
+    <label>Comunicación</label><input type="range" min="1" max="5" value="3" id="comunicacion">
+    <label>Responsabilidad</label><input type="range" min="1" max="5" value="3" id="responsabilidad">
+    <label>Iniciativa</label><input type="range" min="1" max="5" value="3" id="iniciativa">
+    <label>Creatividad</label><input type="range" min="1" max="5" value="3" id="creatividad">
+    <label>Conciencia ambiental</label><input type="range" min="1" max="5" value="3" id="verde">
+  </section>
+
+  <section class="step">
+    <h2>3. Pirámide de Maslow</h2>
+    <label>Necesidades básicas cubiertas</label><input type="range" min="1" max="5" value="3" id="maslow1">
+    <label>Seguridad y estabilidad</label><input type="range" min="1" max="5" value="3" id="maslow2">
+    <label>Pertenencia al grupo</label><input type="range" min="1" max="5" value="3" id="maslow3">
+    <label>Reconocimiento y autoestima</label><input type="range" min="1" max="5" value="3" id="maslow4">
+    <label>Autorrealización</label><input type="range" min="1" max="5" value="3" id="maslow5">
+  </section>
+
+  <section class="step">
+    <h2>4. Ikigai</h2>
+    <label>Lo que amas o te interesa</label><textarea id="ikigai1"></textarea>
+    <label>Lo que se te da bien</label><textarea id="ikigai2"></textarea>
+    <label>Lo que el mundo necesita</label><textarea id="ikigai3"></textarea>
+    <label>Por lo que podrían pagarte</label><textarea id="ikigai4"></textarea>
+  </section>
+
+  <section class="step">
+    <h2>5. DAFO personal</h2>
+    <label>Fortalezas</label><textarea id="fortalezas"></textarea>
+    <label>Debilidades</label><textarea id="debilidades"></textarea>
+    <label>Oportunidades</label><textarea id="oportunidades"></textarea>
+    <label>Amenazas</label><textarea id="amenazas"></textarea>
+  </section>
+
+  <section class="step">
+    <h2>6. Informe final</h2>
+    <div id="informe"></div>
+    <button onclick="window.print()">Imprimir / Guardar PDF</button>
+  </section>
+
+  <div class="nav">
+    <button onclick="prev()">Anterior</button>
+    <button onclick="next()">Siguiente</button>
+  </div>
+</main>
+
+<script>
+let step = 0;
+const steps = document.querySelectorAll(".step");
+
+function val(id){ return document.getElementById(id).value; }
+
+function showStep(){
+  steps.forEach(s => s.classList.remove("active"));
+  steps[step].classList.add("active");
+  document.getElementById("bar").style.width = ((step)/(steps.length-1)*100) + "%";
+  if(step === steps.length-1) generarInforme();
+}
+
+function next(){
+  if(step < steps.length-1){ step++; showStep(); }
+}
+
+function prev(){
+  if(step > 0){ step--; showStep(); }
+}
+
+function nivel(n){
+  n = Number(n);
+  if(n <= 2) return "bajo";
+  if(n == 3) return "medio";
+  return "alto";
+}
+
+function generarAdjetivos(){
+  let adjetivos = [];
+  if(val("equipo") >= 4) adjetivos.push("colaborativo/a");
+  if(val("comunicacion") >= 4) adjetivos.push("comunicativo/a");
+  if(val("responsabilidad") >= 4) adjetivos.push("responsable");
+  if(val("iniciativa") >= 4) adjetivos.push("proactivo/a");
+  if(val("creatividad") >= 4) adjetivos.push("creativo/a");
+  if(val("verde") >= 4) adjetivos.push("comprometido/a con la sostenibilidad");
+  if(adjetivos.length === 0) adjetivos.push("en proceso de autoconocimiento", "mejorable", "orientable");
+  return adjetivos;
+}
+
+function generarInforme(){
+  const adjetivos = generarAdjetivos();
+
+  let soft = [];
+  if(val("equipo") >= 3) soft.push("trabajo en equipo");
+  if(val("comunicacion") >= 3) soft.push("comunicación");
+  if(val("responsabilidad") >= 3) soft.push("responsabilidad");
+  if(val("iniciativa") >= 3) soft.push("iniciativa");
+
+  let deep = [];
+  if(val("creatividad") >= 3) deep.push("creatividad aplicada");
+  if(val("iniciativa") >= 4) deep.push("autonomía");
+  if(val("responsabilidad") >= 4) deep.push("perseverancia");
+
+  let green = [];
+  if(val("verde") >= 3) green.push("conciencia ambiental", "consumo responsable", "mejora sostenible");
+
+  document.getElementById("informe").innerHTML = `
+    <div class="card result">
+      <h2>Perfil de ${val("nombre") || "estudiante"}</h2>
+      <p><strong>Ciclo:</strong> ${val("ciclo") || "No indicado"}</p>
+      <p><strong>Sector de interés:</strong> ${val("sector") || "No indicado"}</p>
+    </div>
+
+    <div class="card">
+      <h3>Adjetivos que definen al estudiante</h3>
+      ${adjetivos.map(a => `<span class="badge">${a}</span>`).join("")}
+      ${val("palabras").split(",").map(a => `<span class="badge">${a.trim()}</span>`).join("")}
+    </div>
+
+    <div class="card">
+      <h3>Lectura Maslow</h3>
+      <p>Necesidades básicas: ${nivel(val("maslow1"))}</p>
+      <p>Seguridad: ${nivel(val("maslow2"))}</p>
+      <p>Pertenencia: ${nivel(val("maslow3"))}</p>
+      <p>Reconocimiento: ${nivel(val("maslow4"))}</p>
+      <p>Autorrealización: ${nivel(val("maslow5"))}</p>
+    </div>
+
+    <div class="card">
+      <h3>Ikigai provisional</h3>
+      <p>Tu perfil apunta a combinar <strong>${val("ikigai1") || "tus intereses"}</strong>, 
+      con <strong>${val("ikigai2") || "tus capacidades"}</strong>, aportando valor mediante 
+      <strong>${val("ikigai3") || "una contribución útil"}</strong> y orientándolo hacia 
+      <strong>${val("ikigai4") || "una salida profesional"}</strong>.</p>
+    </div>
+
+    <div class="grid">
+      <div class="card"><h3>Fortalezas</h3><p>${val("fortalezas") || val("bien") || "Pendiente de concretar."}</p></div>
+      <div class="card"><h3>Debilidades</h3><p>${val("debilidades") || val("nogustos") || "Pendiente de concretar."}</p></div>
+      <div class="card"><h3>Oportunidades</h3><p>${val("oportunidades") || "Formación, prácticas, especialización y mejora de competencias."}</p></div>
+      <div class="card"><h3>Amenazas</h3><p>${val("amenazas") || "Competencia laboral, falta de experiencia o inseguridad personal."}</p></div>
+    </div>
+
+    <div class="card">
+      <h3>Competencias detectadas</h3>
+      <p><strong>Soft skills:</strong> ${soft.join(", ") || "pendientes de desarrollar"}</p>
+      <p><strong>Deep skills:</strong> ${deep.join(", ") || "pendientes de desarrollar"}</p>
+      <p><strong>Green skills:</strong> ${green.join(", ") || "pendientes de desarrollar"}</p>
+    </div>
+
+    <div class="card result">
+      <h3>Propuesta de mejora</h3>
+      <p>Elige una competencia débil, practícala durante dos semanas en clase o en prácticas, y recoge una evidencia: reflexión, foto, rúbrica, feedback o ejemplo real.</p>
+      <p><strong>Frase final:</strong> Tu perfil profesional no se adivina: se construye.</p>
+    </div>
+  `;
+}
+</script>
+
+</body>
+</html>
